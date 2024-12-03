@@ -1,37 +1,53 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark light"><link rel="canonical" href="http://example.com/2024/12/03/hello-world/"><title>Hello World - Hexo</title><link rel="prev" href="http://example.com/2024/12/03/My-first-post/"/><meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hello World - Hexo">
+<meta property="og:url" content="http://example.com/2024/12/03/hello-world/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-03T05:44:58.829Z">
+<meta property="article:modified_time" content="2024-12-03T05:44:58.829Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"/><script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","@name":"Hello World - Hexo","url":"http://example.com/2024/12/03/hello-world/","copyrightHolder":{"@type":"Person","name":"John Doe"},"author":{"@type":"Person","name":"John Doe"},"headline":"Hello World","dateCreated":"2024-12-03T05:44:58.829Z","dateModified":"2024-12-03T05:44:58.829Z"}</script><!-- hexo injector head_end start --><script>function makeGlobalVar(e={}){for(const[o,t]of Object.entries(e))window[o]=t}makeGlobalVar({themePrefix:"crpdm",themeIdentifier:"theme",getThemeColor:function(){const e=JSON.parse(localStorage.getItem(window.themeIdentifier));return e&&"auto"!==e.colorScheme?e.colorScheme:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}});</script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><header class="_header"><div class="crpdm-title-bar crpdm-title-bar"><button class="crpdm-btn-icon crpdm-btn-icon--medium crpdm-btn-icon--ghost crpdm-btn-icon--icon-only crpdm-btn-menu" type="button" aria-label="open" aria-controls="slide-nav" aria-haspopup="dialog"><svg class="crpdm-svg-icon crpdm-btn-icon__icon" focusable="false" aria-hidden="true"><use xlink:href="/images/solid.svg#angle-right"></use></svg></button><h1 class="crpdm-title-bar__title"><a href="/">Hexo</a></h1></div></header><div class="_container" role="main"><article class="crpdm-article"><div class="crpdm-article__header"><h1 class="crpdm-heading--lv-1 crpdm-article__heading">Hello World</h1><div class="crpdm-article-meta"><span class="crpdm-category crpdm-article-meta__categories"><span class="crpdm-category__label" role="img" aria-label="category">📂</span><span class="crpdm-category__content">no category</span></span><span class="crpdm-datetime crpdm-article-meta__date"><span class="crpdm-datetime__label" role="img" aria-label="published at">📆</span><time class="crpdm-datetime__time" id="segh1si6h28" datetime="2024-12-03">2024. 12. 03</time></span><span class="crpdm-datetime crpdm-article-meta__updated"><span class="crpdm-datetime__label" role="img" aria-label="updated at">Updated</span><time class="crpdm-datetime__time" id="ukof7g84lft" datetime="2024-12-03">2024. 12. 03</time></span></div></div><div class="crpdm-article-content"><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
-{% block page_class %}page-post-detail{% endblock %}
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
-
-{% block content %}
-
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
-
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
-    </div>
-  </div>
-
-{% endblock %}
-
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
-
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+</div><section class="crpdm-article__tags"><h2 class="crpdm-heading--lv-2 crpdm-article__tags__heading"><span class="sr-only">tags</span><svg class="crpdm-svg-icon" focusable="false" aria-hidden="false"><use xlink:href="/images/solid.svg#tags"></use></svg></h2><div class="crpdm-tags-list crpdm-tags-list--flat crpdm-article__tags__list">no tags</div></section></article><section class="crpdm-article__author"><h2 class="crpdm-heading--lv-2 sr-only">author</h2><div class="crpdm-author crpdm-author--no-desc"><span class="crpdm-author__gravatar"><img alt="" role="none" width="180" height="180"/></span><p class="crpdm-author__name">John Doe</p><div class="crpdm-author__social"><a class="crpdm-author__social__link" href="/rss.xml" aria-label="rss"><svg class="crpdm-svg-icon crpdm-author__social__icon crpdm-author__social__icon--rss" focusable="false" role="presentation"><use xlink:href="/images/solid.svg#rss"></use></svg></a></div></div></section><section class="crpdm-article__comments"><h2 class="crpdm-heading--lv-2 sr-only">comments</h2></section></div><section class="slide-panel crpdm-slide-panel crpdm-slide-panel--btn-top _side" id="slide-nav" aria-label="settings and navigation" role="region" hidden="hidden" data-ui-name="sidebar"><div class="_side__inner"><div class="crpdm-accordion" id="hl50ejh40e4" data-ui-name="sidebar-accordion"><div class="crpdm-accordion__header"><button class="crpdm-accordion__tab" type="button" id="e11boyokh4g" aria-expanded="false" aria-controls="sc1drlgfmcm"><span aria-hidden>⚙️</span>settings<svg class="crpdm-svg-icon crpdm-accordion__tab__icon" focusable="false" role="presentation"><use xlink:href="/images/solid.svg#chevron-down"></use></svg></button></div><div class="crpdm-accordion__panel" id="sc1drlgfmcm" role="region" aria-labelledby="e11boyokh4g" hidden="hidden"><div class="crpdm-field crpdm-field--column" role="group" aria-labelledby="h3gez5uaict"><div class="crpdm-field__label crpdm-field__label--30" id="h3gez5uaict">theme</div><div class="crpdm-field__body"><div class="crpdm-radio-boxes"><label class="crpdm-radio-boxy crpdm-radio-boxes__item"><input class="crpdm-radio-boxy__control" type="radio" id="wmv7w3g347q" name="theme" value="auto"/><span class="crpdm-radio-boxy__box">auto</span></label><label class="crpdm-radio-boxy crpdm-radio-boxes__item"><input class="crpdm-radio-boxy__control" type="radio" id="ypab6apfips" name="theme" value="light"/><span class="crpdm-radio-boxy__box">light</span></label><label class="crpdm-radio-boxy crpdm-radio-boxes__item"><input class="crpdm-radio-boxy__control" type="radio" id="oxkwptoqm6o" name="theme" value="dark"/><span class="crpdm-radio-boxy__box">dark</span></label></div></div></div><div class="crpdm-field crpdm-field--column" role="group" aria-labelledby="uybv5u8lb08"><div class="crpdm-field__label crpdm-field__label--30" id="uybv5u8lb08">font size</div><div class="crpdm-field__body"><div class="crpdm-radio-slider"><span class="crpdm-radio crpdm-radio-slider__item"><input class="crpdm-radio__control" type="radio" id="m8co6xi62ta" name="font-size" value="small"/><label class="crpdm-radio__label crpdm-radio__label--column" for="m8co6xi62ta">small</label></span><span class="crpdm-radio-slider__bar" aria-hidden="true"></span><span class="crpdm-radio crpdm-radio-slider__item"><input class="crpdm-radio__control" type="radio" id="gpmr2lj4sck" name="font-size" value="medium"/><label class="crpdm-radio__label crpdm-radio__label--column" for="gpmr2lj4sck">medium</label></span><span class="crpdm-radio-slider__bar" aria-hidden="true"></span><span class="crpdm-radio crpdm-radio-slider__item"><input class="crpdm-radio__control" type="radio" id="tvr-viaedqo" name="font-size" value="large"/><label class="crpdm-radio__label crpdm-radio__label--column" for="tvr-viaedqo">large</label></span></div></div></div></div><div class="crpdm-accordion__header"><button class="crpdm-accordion__tab" type="button" id="qrzrper8nro" aria-expanded="false" aria-controls="r3opkp161cc"><span aria-hidden>📑</span>menu<svg class="crpdm-svg-icon crpdm-accordion__tab__icon" focusable="false" role="presentation"><use xlink:href="/images/solid.svg#chevron-down"></use></svg></button></div><div class="crpdm-accordion__panel" id="r3opkp161cc" role="region" aria-labelledby="qrzrper8nro" hidden="hidden"><nav class="crpdm-menu-nav" aria-label="menu"><ul class="crpdm-menu-nav__list">
+        <li class="crpdm-menu-nav__list__item">
+          <a
+            href="/archives"
+            class="crpdm-menu-nav__list__link "
+            
+          >
+            Archives
+          </a>
+        </li>
+      </ul></nav></div></div></div><button class="crpdm-btn-icon crpdm-btn-icon--medium crpdm-btn-icon--ghost crpdm-btn-icon--icon-only closer crpdm-slide-panel__btn-close crpdm-slide-panel__btn-close--top crpdm-slide-panel__btn-close--right" type="button" aria-label="close settings and navigation"><svg class="crpdm-svg-icon crpdm-btn-icon__icon" focusable="false" aria-hidden="true"><use xlink:href="/images/solid.svg#xmark"></use></svg></button></section><footer class="_footer"><div class="crpdm-footer"><p class="crpdm-license">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    aria-label="creative commons license"
+    role="img"
+    preserveAspectRatio="xMidYMid meet"
+    viewBox="0 0 24 24"
+    class="crpdm-license__icon"
+  >
+    <path
+      fill="currentColor"
+      d="m11.89 10.34l-1.34.7c-.14-.3-.31-.51-.52-.63c-.21-.12-.41-.18-.58-.18c-.9 0-1.34.59-1.34 1.77c0 .54.11.97.34 1.29c.22.32.55.48 1 .48c.58 0 .99-.27 1.23-.86l1.23.63c-.26.49-.62.87-1.09 1.15c-.46.28-.97.42-1.53.42c-.9 0-1.62-.27-2.17-.82C6.58 13.74 6.3 13 6.3 12c0-.95.28-1.7.83-2.26c.56-.56 1.26-.84 2.1-.84c1.24-.01 2.13.48 2.66 1.44m5.77 0l-1.32.7c-.14-.3-.34-.51-.53-.63c-.21-.12-.41-.18-.6-.18c-.89 0-1.34.59-1.34 1.77c0 .54.13.97.34 1.29c.23.32.56.48 1 .48c.59 0 1-.27 1.24-.86l1.25.63c-.28.49-.65.87-1.11 1.15c-.47.28-.97.42-1.52.42c-.9 0-1.63-.27-2.17-.82c-.54-.55-.81-1.29-.81-2.29c0-.95.28-1.7.83-2.26c.55-.56 1.25-.84 2.08-.84c1.26-.01 2.14.48 2.66 1.44M12 3.5a8.5 8.5 0 0 1 8.5 8.5a8.5 8.5 0 0 1-8.5 8.5A8.5 8.5 0 0 1 3.5 12A8.5 8.5 0 0 1 12 3.5M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2Z"
+    >
+    </path>
+  </svg>
+<span class="crpdm-license__name">John Doe</span><span class="crpdm-license__link">(<a href="https://creativecommons.org/licenses/by-nc-nd/4.0" rel="external noreferrer noopener nofollow" target="_blank">BY-NC-ND</a>)</span></p><p class="crpdm-watermark">Powered by <a href="https://hexo.io/" rel="external noreferrer" target="_blank">Hexo.</a> Theme by <a href="https://github.com/mulder21c" rel="external noreferrer" target="_blank">mulder21c.</a></p></div></footer><!-- hexo injector body_end start --><script>
+    window.components = new Set(["slide-panel","accordion","radio","article-card"]);
+    window.uis = window.uis || new Map();
+  </script><script src="/js/bundle.js"></script><script src="/js/vendor.js"></script><!-- hexo injector body_end end --></body></html>
