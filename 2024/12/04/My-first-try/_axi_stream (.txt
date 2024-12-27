@@ -1,0 +1,125 @@
+module vga_to_axi_stream (
+    input wire clk,
+    input wire reset_n,
+    input wire vga_hsync,
+    input wire vga_vsync,
+    input wire [7:0] vga_red,
+    input wire [7:0] vga_green,
+    input wire [7:0] vga_blue,
+    output wire axi_tvalid,
+    input wire axi_tready,
+    output wire [23:0] axi_tdata,
+    output wire axi_tlast
+);
+
+    reg [23:0] pixel_data;
+    reg valid;
+    reg last;
+
+    // FIFO signals
+    wire fifo_full;
+    wire fifo_empty;
+    wire [23:0] fifo_data_out;
+    reg fifo_read_en;
+    reg fifo_write_en;
+
+    // FIFO instance
+    fifo #(
+        .DATA_WIDTH(24),
+        .DEPTH(1024)
+    ) fifo_inst (
+        .clk(clk),
+        .reset_n(reset_n),
+        .write_en(fifo_write_en),
+        .read_en(fifo_read_en),
+        .data_in(pixel_data),
+        .data_out(fifo_data_out),
+        .full(fifo_full),
+        .empty(fifo_empty)
+    );
+
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            pixel_data <= 24'b0;
+            valid <= 1'b0;
+            last <= 1'b0;
+            fifo_write_en <= 1'b0;
+        end else begin
+            if (vga_hsync && vga_vsync && !fifo_full) begin
+                pixel_data <= {vga_red, vga_green, vga_blue};
+                valid <= 1'b1;
+                last <= 1'b0;
+                fifo_write_en <= 1'b1;
+            end else if (!vga_hsync && vga_vsync) begin
+                valid <= 1'b0;
+                last <= 1'b1;
+                fifo_write_en <= 1'b0;
+            end else begin
+                valid <= 1'b0;
+                last <= 1'b0;
+                fifo_write_en <= 1'b0;
+            end
+        end
+    end
+
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            fifo_read_en <= 1'b0;
+        end else begin
+            if (axi_tready ) begin
+                fifo_read_en <= 1'b1;
+            end else begin
+                fifo_read_en <= 1'b0;
+            end
+        end
+    end
+
+    assign axi_tvalid = !fifo_empty;
+    assign axi_tdata = fifo_data_out;
+    assign axi_tlast = last;
+
+endmodule
+
+// Simple FIFO module
+module fifo #(
+    parameter DATA_WIDTH = 8,
+    parameter DEPTH = 16
+) (
+    input wire clk,
+    input wire reset_n,
+    input wire write_en,
+    input wire read_en,
+    input wire [DATA_WIDTH-1:0] data_in,
+    output reg [DATA_WIDTH-1:0] data_out,
+    output wire full,
+    output wire empty
+);
+
+    reg [DATA_WIDTH-1:0] mem [0:DEPTH-1];
+    reg [15:0] write_ptr;
+    reg [15:0] read_ptr;
+    reg [15:0] count;
+
+    assign full = (count == DEPTH);
+    assign empty = (count == 0);
+
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            write_ptr <= 0;
+            read_ptr <= 0;
+            count <= 0;
+        end else begin
+            if (write_en && !full) begin
+                mem[write_ptr] <= data_in;
+                write_ptr <= write_ptr + 1;
+                count <= count + 1;
+            end
+            if (read_en && !empty) begin
+                data_out <= mem[read_ptr];
+                read_ptr <= read_ptr + 1;
+                count <= count - 1;
+            end
+        end
+    end
+
+endmodule

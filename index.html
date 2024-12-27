@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,105 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/27/Android-startup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/12/27/Android-startup/" class="post-title-link" itemprop="url">Android_startup</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-12-27 12:32:52 / Modified: 13:26:39" itemprop="dateCreated datePublished" datetime="2024-12-27T12:32:52+08:00">2024-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>resource from: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=5SQP0qfUDjI">https://www.youtube.com/watch?v=5SQP0qfUDjI</a></p>
+<h2 id="init-process"><a href="#init-process" class="headerlink" title="init process"></a>init process</h2><p>it is the first process #1<br><img src="/2024/12/27/Android-startup/init.jpg" alt="init"><br><img src="/2024/12/27/Android-startup/init2.jpg" alt="init2"></p>
+<ul>
+<li>make some directories</li>
+<li>init process will observe the sysProp change all the time.</li>
+<li>when some systemProp meet the value, will execute following commands</li>
+<li>start some deamon process – the process always run in system （守护进程）– installd&#x2F;logd&#x2F;….</li>
+<li>notice that the deamon process will have a socket, that is the way they talk to each other&#x2F;observe.</li>
+<li>start Zygote process</li>
+</ul>
+<h2 id="Zygote"><a href="#Zygote" class="headerlink" title="Zygote"></a>Zygote</h2><p>every application process is forked by Zygote.<br><img src="/2024/12/27/Android-startup/Zygote.jpg" alt="Zygote"></p>
+<ul>
+<li>why use this fork way?<br>– all the processes can share some common memories, and dont need to load&#x2F;init in each own process</li>
+<li>Zygote start sytem server.</li>
+</ul>
+<h2 id="Whole-startup-process"><a href="#Whole-startup-process" class="headerlink" title="Whole startup process"></a>Whole startup process</h2><p><img src="/2024/12/27/Android-startup/start_up.jpg" alt="startup"></p>
+<p><img src="/2024/12/27/Android-startup/AMS.jpg" alt="AMS"></p>
+<p><img src="/2024/12/27/Android-startup/app_launch.jpg" alt="app_launch"></p>
+<p>launch scenario:<br>curent app tell system server, he want to launch another activity(Intent) -&gt;<br>system server will check is the new guy is already there or not, if not -&gt;<br>System server: Hey! Zygote, please help me fork a new process, and dont forget to tell me the new guy’s name (process id)<br>Zygote: got it! fork myself, here you go…. hey System server, here is the new process id XXX<br>new app: I am just borned, with a ActivityThread just like others (the ‘main’ for application), and I need to phone to SYstemserver -&gt;<br>new app: hey System server, I just born and initialized, here is my id.<br>system server: oh, I’ve been waiting for you, then I wil start the new Activity.</p>
+<p><img src="/2024/12/27/Android-startup/process.jpg" alt="process"></p>
+<p>we could see here:<br>init is the #1 process, and Zygote&#x2F;Zygote64 is his child #954&#x2F;#955, and all the other applications father is Zygote</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
