@@ -118,12 +118,12 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">categories</span>
       </div>
   </nav>
@@ -145,6 +145,91 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/17/mobile-challenges/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/17/mobile-challenges/" class="post-title-link" itemprop="url">mobile challenges</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 16:14:29 / Modified: 16:22:26" itemprop="dateCreated datePublished" datetime="2025-01-17T16:14:29+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Cannot-find-Object-XXX"><a href="#Cannot-find-Object-XXX" class="headerlink" title="Cannot find Object XXX"></a>Cannot find Object XXX</h2><h3 id="problem"><a href="#problem" class="headerlink" title="problem"></a>problem</h3><p>for the codes below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">object ServiceCreator &#123;</span><br><span class="line">    private val retrofit: Retrofit =</span><br><span class="line">        Retrofit.Builder()</span><br><span class="line">            .baseUrl(&quot;https://api.example.com/v1/&quot;)</span><br><span class="line">            .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">            .build()</span><br><span class="line"></span><br><span class="line">    fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)</span><br><span class="line"></span><br><span class="line">    inline fun &lt;reified T&gt; create(): T = create(T::class.java)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>when I run the app, the app  crashed, when I look into the logs, it said, cannot find the ServiceCreator object……..</p>
+<h3 id="root-cause"><a href="#root-cause" class="headerlink" title="root cause"></a>root cause</h3><p>when the ServiceCreator get inited, the retrofic instance get created, here is the problem, when we create the retrofic instance, some reason, it throws exception, so it leads to the retrofic instance is not got created successfully.</p>
+<h3 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">object ServiceCreator &#123;</span><br><span class="line">    private val retrofit: Retrofit by lazy &#123;</span><br><span class="line">            Retrofit.Builder()</span><br><span class="line">                .baseUrl(&quot;https://api.example.com/v1/&quot;)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)</span><br><span class="line"></span><br><span class="line">    inline fun &lt;reified T&gt; create(): T = create(T::class.java)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -284,7 +369,16 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-01-17 14:36:45" itemprop="dateModified" datetime="2025-01-17T14:36:45+08:00">2025-01-17</time>
+      <time title="Modified: 2025-01-17 16:14:05" itemprop="dateModified" datetime="2025-01-17T16:14:05+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
     </span>
 
   
@@ -969,88 +1063,6 @@
 </li>
 </ul>
 <h2 id="Source-code-change"><a href="#Source-code-change" class="headerlink" title="Source code change"></a>Source code change</h2><p>if overlay cannot satisfy your requirement, you better to extend the code instead of changing the source code.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/08/tech-diary/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/08/tech-diary/" class="post-title-link" itemprop="url">tech_diary</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-08 18:00:42 / Modified: 18:21:05" itemprop="dateCreated datePublished" datetime="2024-12-08T18:00:42+08:00">2024-12-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Today is sunday, because I cannot go outside, now I have an interesting of watching some new tech posts and live broadcasts, it is weird that in the past, I dont want to use my personal time to watch such kind of things totally, but right now, maybe because I cannot go outside play or I miss the company, I think watch that live broadcast is very interesting.</p>
-<p>So, I watched one Google devfest live broadcast<br>and it mentions the Gemini, I still remember that access of <strong>Gemini</strong> – I stil didnot get it in my company, but I know it is very interesting, I should try it.<br>it also mentions <strong>Mobile-Agent</strong>, sounds like it is something like Siri, it can be an assistant in our mobile to do some operations on behalf of ourselves, it will be the trend, but still have some challenges to fix – delay or something, The <strong>Agent</strong> is called 智能体 in Chinese, it try to copy the way of people thinking or making decisions.</p>
-<p>also I watched a ‘how AI will change the ways of coding’<br><strong>AI assistent</strong> - developed by jetbrains, they said they have all the abilities in GPT, for the abilities GPT dont have? – they are working on it.<br><strong>Github</strong> -&gt; GitLab, people prefer to use gitLab instead of github, because of the gitlab is much more private, I dont know this before, I should check it. </p>
-<p>To sum up, AI is definitely the trend, no matter GPT (OpenAI) &#x2F; Gemini (Google) &#x2F; Ai Assistant (jetbrains), they will change our life.</p>
 
       
     </div>
