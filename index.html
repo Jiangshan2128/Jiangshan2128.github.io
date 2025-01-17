@@ -81,7 +81,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-aosp"><a href="/categories/AOSP/" rel="section"><i class="fa fa-AOSP fa-fw"></i>AOSP</a></li><li class="menu-item menu-item-investment"><a href="/categories/Investment/" rel="section"><i class="fa fa-Investment fa-fw"></i>Investment</a></li><li class="menu-item menu-item-personal"><a href="/categories/Personal/" rel="section"><i class="fa fa-Personal fa-fw"></i>Personal</a></li><li class="menu-item menu-item-other"><a href="/categories/Other/" rel="section"><i class="fa fa-Other fa-fw"></i>Other</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-aosp"><a href="/categories/AOSP/" rel="section"><i class="fa fa-AOSP fa-fw"></i>AOSP</a></li><li class="menu-item menu-item-mobile"><a href="/categories/Mobile/" rel="section"><i class="fa fa-Mobile fa-fw"></i>Mobile</a></li><li class="menu-item menu-item-personal"><a href="/categories/Personal/" rel="section"><i class="fa fa-Personal fa-fw"></i>Personal</a></li><li class="menu-item menu-item-other"><a href="/categories/Other/" rel="section"><i class="fa fa-Other fa-fw"></i>Other</a></li>
   </ul>
 </nav>
 
@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,183 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/17/create-custom-system-app-in-aosp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/17/create-custom-system-app-in-aosp/" class="post-title-link" itemprop="url">create custom system app in aosp</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 13:22:21 / Modified: 14:27:56" itemprop="dateCreated datePublished" datetime="2025-01-17T13:22:21+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>some blockers when I created a custom app in aosp for automotive.</p>
+<h2 id="how-to-create-a-new-module-under-AOSP"><a href="#how-to-create-a-new-module-under-AOSP" class="headerlink" title="how to create a new module under AOSP"></a>how to create a new module under AOSP</h2><p>at first, I want to edit the new project in aosp project folder, but it is so hard to manage the deoendencies without build.gradle.</p>
+<p>so, I know that the right way is to create this app in Android Sudio with gradle, an when we tested ready, then copy the source folders under packages&#x2F;apps&#x2F;, and write a Android.bp file seperately.</p>
+<h2 id="how-to-find-the-depdencies-name-in-aosp"><a href="#how-to-find-the-depdencies-name-in-aosp" class="headerlink" title="how to find the depdencies name in aosp"></a>how to find the depdencies name in aosp</h2><p>most of the unrecognized dependencies are prebuilt sdks, like the androidx libraries, if you want to find the library’s name in AOSP:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">androidx-constraintlayout = &#123; group = &quot;androidx.constraintlayout&quot;, name = &quot;constraintlayout&quot;, version.ref = &quot;constraintlayout&quot; &#125;</span><br></pre></td></tr></table></figure>
+<p>then I need to go to &#x2F;prebuilt&#x2F; library to search the name using</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ada@Win10AFZVA:~/Aosp/prebuilts/sdk$ find . -type f -exec grep -H &#x27;name:.*fragment&#x27; &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<p>this command will listed the following:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-ktx-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-ktx&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-ktx-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-ktx&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment&quot;,</span><br><span class="line">./current/support/Android.bp:    name: &quot;android-support-fragment-nodeps&quot;,</span><br><span class="line">./current/support/Android.bp:    name: &quot;android-support-fragment&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>also, we can just use the grep command:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ada@Win10AFZVA:~/Aosp/prebuilts/sdk/current/androidx$ grep &#x27;name:.*fragment&#x27; Android.bp</span><br></pre></td></tr></table></figure>
+
+<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p>in app’s Android.bp, where we define the dependecies using static_libs, it is weird that some libraries even we dont list here, we can stil pass the compile, seems like they are imported somewhere else, e.g. androidx.fragmetn.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/08/my-mobile-app/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/08/my-mobile-app/" class="post-title-link" itemprop="url">my mobile app</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-08 13:15:37 / Modified: 13:38:03" itemprop="dateCreated datePublished" datetime="2025-01-08T13:15:37+08:00">2025-01-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>here I want to take time to build a mobile app just like Fidelity to review the things I learned these years.</p>
+<ul>
+<li><p>introduce bom strategy to import compose dependency, so that we dont need to define each compose libraries’ version, it is all updated by bom.</p>
+</li>
+<li><p>use version catalog to manage versions.</p>
+</li>
+<li><p>use compose to develop ui part</p>
+</li>
+<li><p>use mvvm structure. and coroutines</p>
+</li>
+<li><p>use retrofit to fetch service.</p>
+</li>
+<li><p>use ksp to decouple modules.</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -659,7 +836,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-27 13:45:51" itemprop="dateModified" datetime="2024-12-27T13:45:51+08:00">2024-12-27</time>
+      <time title="Modified: 2025-01-16 14:34:04" itemprop="dateModified" datetime="2025-01-16T14:34:04+08:00">2025-01-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -682,9 +859,12 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="Useful-Resources"><a href="#Useful-Resources" class="headerlink" title="Useful Resources"></a>Useful Resources</h2><p>AOSP directory structure: <a target="_blank" rel="noopener" href="https://medium.com/@mmohamedrashik/understanding-aosp-folders-an-expert-guide-307a22451cf5">https://medium.com/@mmohamedrashik/understanding-aosp-folders-an-expert-guide-307a22451cf5</a></p>
+<p>and </p>
+<p><a target="_blank" rel="noopener" href="https://xdaforums.com/t/guide-understanding-the-android-source-code.2620389/">https://xdaforums.com/t/guide-understanding-the-android-source-code.2620389/</a></p>
 <p>build app in Car: <a target="_blank" rel="noopener" href="https://medium.com/@sreelakshmis.dilip/android-automotive-build-your-first-app-f4b882eb01e5">https://medium.com/@sreelakshmis.dilip/android-automotive-build-your-first-app-f4b882eb01e5</a></p>
 <p>AOSP build system:<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hQZz2PRNdxI">https://www.youtube.com/watch?v=hQZz2PRNdxI</a></p>
 <p>import AOSP into Android Studio: <a target="_blank" rel="noopener" href="https://param105.medium.com/aosp-source-code-in-android-studio-explore-only-1cdc3081cf51">https://param105.medium.com/aosp-source-code-in-android-studio-explore-only-1cdc3081cf51</a></p>
+<p><a target="_blank" rel="noopener" href="https://android.googlesource.com/platform/development/+/refs/heads/master/tools/idegen/README">https://android.googlesource.com/platform/development/+/refs/heads/master/tools/idegen/README</a></p>
 <h2 id="AOSP-build-system"><a href="#AOSP-build-system" class="headerlink" title="AOSP build system"></a>AOSP build system</h2><p><img src="/../images/AOSP_Build.jpg" alt="AOSP_Build"></p>
 <ul>
 <li>Android.bp and Android.mk are similar, just like build.gradle. bp is newer</li>
@@ -863,190 +1043,6 @@
 <p>So, I watched one Google devfest live broadcast<br>and it mentions the Gemini, I still remember that access of <strong>Gemini</strong> – I stil didnot get it in my company, but I know it is very interesting, I should try it.<br>it also mentions <strong>Mobile-Agent</strong>, sounds like it is something like Siri, it can be an assistant in our mobile to do some operations on behalf of ourselves, it will be the trend, but still have some challenges to fix – delay or something, The <strong>Agent</strong> is called 智能体 in Chinese, it try to copy the way of people thinking or making decisions.</p>
 <p>also I watched a ‘how AI will change the ways of coding’<br><strong>AI assistent</strong> - developed by jetbrains, they said they have all the abilities in GPT, for the abilities GPT dont have? – they are working on it.<br><strong>Github</strong> -&gt; GitLab, people prefer to use gitLab instead of github, because of the gitlab is much more private, I dont know this before, I should check it. </p>
 <p>To sum up, AI is definitely the trend, no matter GPT (OpenAI) &#x2F; Gemini (Google) &#x2F; Ai Assistant (jetbrains), they will change our life.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/04/aosp-env-setup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/04/aosp-env-setup/" class="post-title-link" itemprop="url">aosp_env_setup</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-12-04 20:20:41" itemprop="dateCreated datePublished" datetime="2024-12-04T20:20:41+08:00">2024-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-05 11:39:55" itemprop="dateModified" datetime="2024-12-05T11:39:55+08:00">2024-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Useful-Resource"><a href="#Useful-Resource" class="headerlink" title="Useful Resource"></a>Useful Resource</h2><ol>
-<li>I setup the env follow this blog: <a target="_blank" rel="noopener" href="https://blog.csdn.net/devnn/article/details/131868022">https://blog.csdn.net/devnn/article/details/131868022</a></li>
-</ol>
-<h2 id="Some-challenges"><a href="#Some-challenges" class="headerlink" title="Some challenges"></a>Some challenges</h2><h3 id="AOSP-Cygwin-virtual-box-wsl"><a href="#AOSP-Cygwin-virtual-box-wsl" class="headerlink" title="AOSP - Cygwin &#x2F; virtual box &#x2F; wsl"></a>AOSP - Cygwin &#x2F; virtual box &#x2F; wsl</h3><ul>
-<li><p>bacause my computer system is Windows, so at first, I dont want to install VMWare or somthing which is really complex, so I tried to use cygwin to run linux commands, but finally, it turns out that the Cygwin is not enough, it lacks some tools that AOSP build needs. </p>
-</li>
-<li><p>so, the second try, I want to use the virtual box to lunch the linux system (Ubuntu), it should work, but it need to confg many things, and you need to download virtual box, I did not end up with this method, but it should work, I want to have a simpler way, better to just have a command line.</p>
-</li>
-<li><p>the final solution: I use WSL, because my computer is Win10, so it born with the WSL tool, so I setup the unbuntu with wsl reference to the resource 1, finally did it. it just have a Ubuntu command line, dont have the user interface, it is much more lighter.</p>
-</li>
-</ul>
-<h3 id="Challenges-Env-setup"><a href="#Challenges-Env-setup" class="headerlink" title="Challenges Env setup"></a>Challenges Env setup</h3><ul>
-<li>For downloading the AOSP, at first, I downloaded the latest version, but, you know what?….I finally found that AS dont have a emulator can run Android 16, so I need to re-download the AOSP with Android 13.</li>
-</ul>
-<h3 id="Challenges-building-AOSP"><a href="#Challenges-building-AOSP" class="headerlink" title="Challenges building AOSP"></a>Challenges building AOSP</h3><ul>
-<li><p>When I use the ‘m’ command to start the build, it ends up with not enough memory error(error code 137), but I checked with the memory, it seems enough, finally it turns out that I need to use ‘m -j8’ to identify the threads, otherwies, it may use all the threads, then the memory will not enough.</p>
-</li>
-<li><p>For choosing the lunch target, we can find related targets in \Aosp\device\generic\car\AndroidProducts.mk, I thought need to use the target - aosp_car_x86_64, but when it build finished, I need to pack a zip file to windows, I found the pack zip file command not work, it turns out we need to use the target with sdk prefix, so we can have the zip file, and lunch the image in windows emulator.</p>
-</li>
-</ul>
-<h3 id="Final-Result"><a href="#Final-Result" class="headerlink" title="Final Result"></a>Final Result</h3><p><img src="/../images/AOSP_Env_Setup.jpg" alt="image"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/04/My-first-try/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/04/My-first-try/" class="post-title-link" itemprop="url">My first try</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-04 13:46:22 / Modified: 15:51:35" itemprop="dateCreated datePublished" datetime="2024-12-04T13:46:22+08:00">2024-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Brand-New-Start"><a href="#Brand-New-Start" class="headerlink" title="Brand New Start!"></a>Brand New Start!</h2><p>It is so good to know this way of wrting tech blogs, this is absolutely the brand new start, so interesting, thanks Jack!</p>
 
       
     </div>
