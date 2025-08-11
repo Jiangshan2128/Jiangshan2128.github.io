@@ -184,7 +184,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-08-11 16:15:16 / Modified: 17:45:50" itemprop="dateCreated datePublished" datetime="2025-08-11T16:15:16+08:00">2025-08-11</time>
+      <time title="Created: 2025-08-11 16:15:16 / Modified: 17:54:16" itemprop="dateCreated datePublished" datetime="2025-08-11T16:15:16+08:00">2025-08-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -208,7 +208,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="HVAC-（Heating-Ventilation-and-Air-Conditioning）"><a href="#HVAC-（Heating-Ventilation-and-Air-Conditioning）" class="headerlink" title="HVAC （Heating, Ventilation and Air Conditioning）"></a>HVAC （Heating, Ventilation and Air Conditioning）</h2><p>article link: <a target="_blank" rel="noopener" href="https://juejin.cn/post/6997290650794197022">https://juejin.cn/post/6997290650794197022</a></p>
 <p>main charactors:<br>SystemUI, CarHvacApp, car-lib (CarService, CarHvacManager)</p>
-<p>CarHvacApp<br>&emsp;HvacUiService<br>$~~~~~~$1. create five windows<br>$~~~~~~$2. create HvacPanelController<br>           1. view initialization and click events…<br>           2. expand&#x2F;collapse panel<br>        3. bind HvacController<br>    HvanController (the second service)<br>        dependent on car-lib library to start CarService<br>            start CarService<br>                createCar()<br>                connect()<br>            get CarHvacManager<br>            use CarHvacManager get&#x2F;set hvac properties.<br>                CarService interact with hal to get&#x2F;ser properties</p>
+<p>CarHvacApp<br>&emsp;HvacUiService<br>&emsp;&emsp;1. create five windows<br>&emsp;&emsp;2. create HvacPanelController<br>&emsp;&emsp;&emsp;&emsp;1. view initialization and click events…<br>&emsp;&emsp;&emsp;&emsp;2. expand&#x2F;collapse panel<br>&emsp;&emsp;3. bind HvacController<br>&emsp;HvanController (the second service)<br>&emsp;&emsp;dependent on car-lib library to start CarService<br>&emsp;&emsp;&emsp;&emsp;start CarService<br>&emsp;&emsp;&emsp;&emsp;createCar()<br>&emsp;&emsp;&emsp;&emsp;connect()<br>&emsp;&emsp;get CarHvacManager<br>&emsp;&emsp;use CarHvacManager get&#x2F;set hvac properties.<br>&emsp;&emsp;&emsp;&emsp;CarService interact with hal to get&#x2F;set properties</p>
 
       
     </div>
