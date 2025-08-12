@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,107 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/11/carlife/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/11/carlife/" class="post-title-link" itemprop="url">carlife</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-08-11 18:00:17" itemprop="dateCreated datePublished" datetime="2025-08-11T18:00:17+08:00">2025-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-08-12 16:00:17" itemprop="dateModified" datetime="2025-08-12T16:00:17+08:00">2025-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>instead of using json&#x2F;xml, carlife use protocol buffer(protobuf) format to exchange data.<br>related resource: <a target="_blank" rel="noopener" href="https://medium.com/nerd-for-tech/protobuf-what-why-fcb324a64564">https://medium.com/nerd-for-tech/protobuf-what-why-fcb324a64564</a></p>
+<h2 id="CarLife-Channels"><a href="#CarLife-Channels" class="headerlink" title="CarLife Channels"></a>CarLife Channels</h2><p>carlife data streams:<br>command channel(控制流)<br>video channel<br>audio channel<br>&emsp;1. media<br>&emsp;2. navigation TTS(Text to Sound)<br>touch channel(反控流)：传输车机触摸事件或者按键事件到手机端<br>VR channel(语音流)：automotive -&gt; mobile</p>
+<h2 id="AOA连接（Android手机）"><a href="#AOA连接（Android手机）" class="headerlink" title="AOA连接（Android手机）"></a>AOA连接（Android手机）</h2><p><img src="/../images/carlife_aoa_process.JPG" alt="AOSP_CARLIFE_AOA"></p>
+<p>HU(Head Unit): 车载娱乐系统<br>MD(Mobile Device): 手机</p>
+<ol>
+<li>配件（车机）枚举连接过来的设备，判断Android设备（手机）是否处于Accessory Mode，如果不是，车机向手机发出切换到AOA模式的请求。</li>
+<li>车机向手机发送51号指令，查看手机是否支持AOA协议</li>
+<li>发送52号指令，附带信息：(Manufacturer: Baidu, Model	Name	<br>: CarLife, Version: 1.0.0)</li>
+<li>发送53号指令，请求手机切换至AOA模式，手机根据上述三个参数，确定绑定到该车机的app</li>
+<li>连接成功</li>
+</ol>
+<h2 id="AOA消息结构"><a href="#AOA消息结构" class="headerlink" title="AOA消息结构"></a>AOA消息结构</h2><p><img src="/../images/carlife_aoa_message.JPG" alt="AOSP_CARLIFE_AOA_MESSAGE"><br>消息中Chennel ID标明这个消息来自于哪个数据通道，AOA Head共8个字节</p>
+<h2 id="音频焦点类型"><a href="#音频焦点类型" class="headerlink" title="音频焦点类型"></a>音频焦点类型</h2><p>长期独占型：Media，音频焦点在申请过后，不会主动释放，只有被其他音频应用抢占时，才会失去自身的音频焦点。<br>短期独占型：VR，在较短时间内占用音频播放设备，使用完之后马上释放播放设备。<br>可混音型：导航TTS，短期占用音频设备，但是期间其他音频应用可以同时使用该音频播放设备，降低音量</p>
+<p>above android 12, system will handle audio focus change, you dont need to abandon audio focus mannually, make sure the sudio attributes set correctly.</p>
+<p>key components:<br>AudioManager<br>AudioFocusRequest: audio focus parameters<br>OnAudioFocusChangeListener</p>
+<h3 id="音频模块优先级"><a href="#音频模块优先级" class="headerlink" title="音频模块优先级"></a>音频模块优先级</h3><p>电话 &gt; VR &gt; Media&#x2F;导航</p>
+<h2 id="各种通道数据传输"><a href="#各种通道数据传输" class="headerlink" title="各种通道数据传输"></a>各种通道数据传输</h2><p>基本为先通过命令通道发送命令协商前期参数及准备，然后通过视频&#x2F;音频通道发送真实数据。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -957,106 +1058,6 @@
 </li>
 </ul>
 <p>I think by using the AI tool on development, it is good to use them analyze codes and generate unit testing codes, for wring, it is hard to know the business logics, so, it is still cool for me.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/09/aosp-basics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/09/aosp-basics/" class="post-title-link" itemprop="url">aosp_basics</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-12-09 10:57:17" itemprop="dateCreated datePublished" datetime="2024-12-09T10:57:17+08:00">2024-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-01-16 14:34:04" itemprop="dateModified" datetime="2025-01-16T14:34:04+08:00">2025-01-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Useful-Resources"><a href="#Useful-Resources" class="headerlink" title="Useful Resources"></a>Useful Resources</h2><p>AOSP directory structure: <a target="_blank" rel="noopener" href="https://medium.com/@mmohamedrashik/understanding-aosp-folders-an-expert-guide-307a22451cf5">https://medium.com/@mmohamedrashik/understanding-aosp-folders-an-expert-guide-307a22451cf5</a></p>
-<p>and </p>
-<p><a target="_blank" rel="noopener" href="https://xdaforums.com/t/guide-understanding-the-android-source-code.2620389/">https://xdaforums.com/t/guide-understanding-the-android-source-code.2620389/</a></p>
-<p>build app in Car: <a target="_blank" rel="noopener" href="https://medium.com/@sreelakshmis.dilip/android-automotive-build-your-first-app-f4b882eb01e5">https://medium.com/@sreelakshmis.dilip/android-automotive-build-your-first-app-f4b882eb01e5</a></p>
-<p>AOSP build system:<br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=hQZz2PRNdxI">https://www.youtube.com/watch?v=hQZz2PRNdxI</a></p>
-<p>import AOSP into Android Studio: <a target="_blank" rel="noopener" href="https://param105.medium.com/aosp-source-code-in-android-studio-explore-only-1cdc3081cf51">https://param105.medium.com/aosp-source-code-in-android-studio-explore-only-1cdc3081cf51</a></p>
-<p><a target="_blank" rel="noopener" href="https://android.googlesource.com/platform/development/+/refs/heads/master/tools/idegen/README">https://android.googlesource.com/platform/development/+/refs/heads/master/tools/idegen/README</a></p>
-<h2 id="AOSP-build-system"><a href="#AOSP-build-system" class="headerlink" title="AOSP build system"></a>AOSP build system</h2><p><img src="/../images/AOSP_Build.jpg" alt="AOSP_Build"></p>
-<ul>
-<li>Android.bp and Android.mk are similar, just like build.gradle. bp is newer</li>
-<li>Soong reads bp files and translate into ninja file</li>
-<li>kati reaads mk file and translate into ninja file</li>
-<li>when you changed code in one module – systemui –, you need to take care of the Android.bp file under systemui module to see how to build it</li>
-<li>Car system make file located in &#x2F;packages&#x2F;services&#x2F;Car&#x2F;car_product&#x2F;build&#x2F;car.mk, if you added one new app, you need to add that package in car.mk.</li>
-</ul>
-<h2 id="AOSP-directory-structure"><a href="#AOSP-directory-structure" class="headerlink" title="AOSP directory structure"></a>AOSP directory structure</h2><p>car related apps source code: &#x2F;paackages&#x2F;apps&#x2F;Car&#x2F;SystemUI<br>related service source code: &#x2F;packages&#x2F;services&#x2F;Car</p>
 
       
     </div>
