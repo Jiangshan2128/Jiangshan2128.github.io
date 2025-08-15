@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,174 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/15/dynamic-proxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/15/dynamic-proxy/" class="post-title-link" itemprop="url">dynamic_proxy</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-08-15 17:03:22 / Modified: 17:50:47" itemprop="dateCreated datePublished" datetime="2025-08-15T17:03:22+08:00">2025-08-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Dynamic-Proxy-and-Retrofit"><a href="#Dynamic-Proxy-and-Retrofit" class="headerlink" title="Dynamic Proxy and Retrofit"></a>Dynamic Proxy and Retrofit</h2><p>related resource:<br><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/reflection/proxy/index.html">https://liaoxuefeng.com/books/java/reflection/proxy/index.html</a></p>
+<p>dynamic proxy is actually the process of creating a proxy class by JVM during runtime</p>
+<p>with the interface as below:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">morning</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JVM generates a proxy class:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloDynamicProxy</span> <span class="keyword">implements</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">    InvocationHandler handler;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HelloDynamicProxy</span><span class="params">(InvocationHandler handler)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.handler = handler;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">morning</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        handler.invoke(</span><br><span class="line">           <span class="built_in">this</span>,</span><br><span class="line">           Hello.class.getMethod(<span class="string">&quot;morning&quot;</span>, String.class),</span><br><span class="line">           <span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; name &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>as you can see, when you call Proxy.newProxyInstance, it will return the HelloDynamicProxy instance, when we use this proxy instance to call interface method, it will invoke the handler’s invoke method.</p>
+<h2 id="Retrofit-mechanism"><a href="#Retrofit-mechanism" class="headerlink" title="Retrofit mechanism"></a>Retrofit mechanism</h2><p>related resource:<br><a target="_blank" rel="noopener" href="https://proandroiddev.com/retrofit-magic-service-interface-8efd486c8996">https://proandroiddev.com/retrofit-magic-service-interface-8efd486c8996</a></p>
+<p>Retrofit is based on dynamic proxy, user just need to define call service interface.<br>when we call: retrofit.create(..), it will return a proxy instance, just like we say in the above, so when we call retrofit service method, it will routed to InvocationHandler’s invoke method, and then in this method, we will parse the interface method annotations, and make the http call.</p>
+<h3 id="whole-process"><a href="#whole-process" class="headerlink" title="whole process"></a>whole process</h3><p>Validation: Retrofit confirms APIService is valid and annotations are correct.<br>Dynamic Proxy Creation: Retrofit creates a proxy that intercepts method calls.<br>Method Blueprint Creation: The getUser() method is parsed into a ServiceMethod.<br>Runtime Interception: The proxy catches the call and passes it to ServiceMethod.<br>Request Assembly: Query parameters are encoded, headers added.<br>HTTP Execution: The request is executed via OkHttp.<br>Response Conversion: Raw HTTP response is converted to UserResponse using the configured converter.<br>Suspend Resumption: The coroutine is resumed with the result.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/13/android-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/13/android-compose/" class="post-title-link" itemprop="url">android compose</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-08-13 09:18:02 / Modified: 09:19:01" itemprop="dateCreated datePublished" datetime="2025-08-13T09:18:02+08:00">2025-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -873,191 +1041,6 @@
           <p>resources:<br>Understanding Looper, messageQueue, handler: <a target="_blank" rel="noopener" href="https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a">https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a</a></p>
 <p>haandling thread:<br>Handler -&gt; AsyncTask -&gt; RxJava -&gt; Coroutines</p>
 <p>the evolution in F working experience:<br>Retrofic + Rxjava (reactiveX library)-&gt;<br>Retrofit + Livedaata (Android specific related) -&gt;<br>Retrofit + Coroutines (kotlin lib)</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/27/Android-startup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/27/Android-startup/" class="post-title-link" itemprop="url">Android_startup</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-27 12:32:52 / Modified: 15:00:45" itemprop="dateCreated datePublished" datetime="2024-12-27T12:32:52+08:00">2024-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>resource from: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=5SQP0qfUDjI">https://www.youtube.com/watch?v=5SQP0qfUDjI</a></p>
-<h2 id="init-process"><a href="#init-process" class="headerlink" title="init process"></a>init process</h2><p>it is the first process #1<br><img src="/../images/init.jpg" alt="init"><br><img src="/../images/init2.jpg" alt="init2"></p>
-<ul>
-<li>make some directories</li>
-<li>init process will observe the sysProp change all the time.</li>
-<li>when some systemProp meet the value, will execute following commands</li>
-<li>start some deamon process – the process always run in system （守护进程）– installd&#x2F;logd&#x2F;….</li>
-<li>notice that the deamon process will have a socket, that is the way they talk to each other&#x2F;observe.</li>
-<li>start Zygote process</li>
-</ul>
-<h2 id="Zygote"><a href="#Zygote" class="headerlink" title="Zygote"></a>Zygote</h2><p>every application process is forked by Zygote.<br><img src="/../images/Zygote.jpg" alt="Zygote"></p>
-<ul>
-<li>why use this fork way?<br>– all the processes can share some common memories, and dont need to load&#x2F;init in each own process</li>
-<li>Zygote start sytem server.</li>
-</ul>
-<h2 id="Whole-startup-process"><a href="#Whole-startup-process" class="headerlink" title="Whole startup process"></a>Whole startup process</h2><p><img src="/../images/start_up.jpg" alt="startup"></p>
-<p><img src="/../images/AMS.jpg" alt="AMS"></p>
-<p><img src="/../images/app_launch.jpg" alt="app_launch"></p>
-<p>launch scenario:<br>curent app tell system server, he want to launch another activity(Intent) -&gt;<br>system server will check is the new guy is already there or not, if not -&gt;<br>System server: Hey! Zygote, please help me fork a new process, and dont forget to tell me the new guy’s name (process id)<br>Zygote: got it! fork myself, here you go…. hey System server, here is the new process id XXX<br>new app: I am just borned, with a ActivityThread just like others (the ‘main’ for application), and I need to phone to SYstemserver -&gt;<br>new app: hey System server, I just born and initialized, here is my id.<br>system server: oh, I’ve been waiting for you, then I wil start the new Activity.</p>
-<p><img src="/../images/process.jpg" alt="process"></p>
-<p>we could see here:<br>init is the #1 process, and Zygote&#x2F;Zygote64 is his child #954&#x2F;#955, and all the other applications father is Zygote</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/27/tech-diary-2024-12-27/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/27/tech-diary-2024-12-27/" class="post-title-link" itemprop="url">tech_diary_2024_12_27</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-27 11:43:45 / Modified: 11:50:18" itemprop="dateCreated datePublished" datetime="2024-12-27T11:43:45+08:00">2024-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Yesterday, after the flue is getting better, I can have my brain back to learn something interesting, so I tried Copilot and Gemini for free version</p>
-<ul>
-<li><p>For the Gemini, I installed it in Android Studio, seems like it needs the whole project to loaded, and then it can recognize the files in it.</p>
-</li>
-<li><p>For Copilot, I installed it in VS Code, when I drag one individual file into VS Code, it can recognize it, for this perspective, I think it is more easy to use.</p>
-</li>
-</ul>
-<p>I think by using the AI tool on development, it is good to use them analyze codes and generate unit testing codes, for wring, it is hard to know the business logics, so, it is still cool for me.</p>
 
       
     </div>

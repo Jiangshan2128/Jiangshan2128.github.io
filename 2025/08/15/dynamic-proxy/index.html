@@ -19,26 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jiangshan2128.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="HVAC （Heating, Ventilation and Air Conditioning）article link: https:&#x2F;&#x2F;juejin.cn&#x2F;post&#x2F;6997290650794197022 main charactors:SystemUI, CarHvacApp, car-lib (CarService, CarHvacManager) CarHvacApp&emsp;Hvac">
+    <meta name="description" content="Dynamic Proxy and Retrofitrelated resource:https:&#x2F;&#x2F;liaoxuefeng.com&#x2F;books&#x2F;java&#x2F;reflection&#x2F;proxy&#x2F;index.html dynamic proxy is actually the process of creating a proxy class by JVM during runtime with the">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hvac">
-<meta property="og:url" content="https://jiangshan2128.github.io/2025/08/11/hvac/index.html">
+<meta property="og:title" content="dynamic_proxy">
+<meta property="og:url" content="https://jiangshan2128.github.io/2025/08/15/dynamic-proxy/index.html">
 <meta property="og:site_name" content="Working Notes">
-<meta property="og:description" content="HVAC （Heating, Ventilation and Air Conditioning）article link: https:&#x2F;&#x2F;juejin.cn&#x2F;post&#x2F;6997290650794197022 main charactors:SystemUI, CarHvacApp, car-lib (CarService, CarHvacManager) CarHvacApp&emsp;Hvac">
+<meta property="og:description" content="Dynamic Proxy and Retrofitrelated resource:https:&#x2F;&#x2F;liaoxuefeng.com&#x2F;books&#x2F;java&#x2F;reflection&#x2F;proxy&#x2F;index.html dynamic proxy is actually the process of creating a proxy class by JVM during runtime with the">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-08-11T08:15:16.000Z">
-<meta property="article:modified_time" content="2025-08-11T09:54:16.551Z">
+<meta property="article:published_time" content="2025-08-15T09:03:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T09:50:47.233Z">
 <meta property="article:author" content="Jiang Shan">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiangshan2128.github.io/2025/08/11/hvac/">
+<link rel="canonical" href="https://jiangshan2128.github.io/2025/08/15/dynamic-proxy/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://jiangshan2128.github.io/2025/08/11/hvac/","path":"2025/08/11/hvac/","title":"hvac"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://jiangshan2128.github.io/2025/08/15/dynamic-proxy/","path":"2025/08/15/dynamic-proxy/","title":"dynamic_proxy"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>hvac | Working Notes</title>
+<title>dynamic_proxy | Working Notes</title>
   
 
 
@@ -110,7 +110,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HVAC-%EF%BC%88Heating-Ventilation-and-Air-Conditioning%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">HVAC （Heating, Ventilation and Air Conditioning）</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Proxy-and-Retrofit"><span class="nav-number">1.</span> <span class="nav-text">Dynamic Proxy and Retrofit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit-mechanism"><span class="nav-number">2.</span> <span class="nav-text">Retrofit mechanism</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#whole-process"><span class="nav-number">2.1.</span> <span class="nav-text">whole process</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/11/hvac/">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/15/dynamic-proxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,12 +173,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="hvac | Working Notes">
+      <meta itemprop="name" content="dynamic_proxy | Working Notes">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hvac
+          dynamic_proxy
         </h1>
 
         <div class="post-meta-container">
@@ -190,7 +190,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-08-11 16:15:16 / Modified: 17:54:16" itemprop="dateCreated datePublished" datetime="2025-08-11T16:15:16+08:00">2025-08-11</time>
+      <time title="Created: 2025-08-15 17:03:22 / Modified: 17:50:47" itemprop="dateCreated datePublished" datetime="2025-08-15T17:03:22+08:00">2025-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -198,7 +198,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
         </span>
     </span>
 
@@ -211,9 +211,18 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="HVAC-（Heating-Ventilation-and-Air-Conditioning）"><a href="#HVAC-（Heating-Ventilation-and-Air-Conditioning）" class="headerlink" title="HVAC （Heating, Ventilation and Air Conditioning）"></a>HVAC （Heating, Ventilation and Air Conditioning）</h2><p>article link: <a target="_blank" rel="noopener" href="https://juejin.cn/post/6997290650794197022">https://juejin.cn/post/6997290650794197022</a></p>
-<p>main charactors:<br>SystemUI, CarHvacApp, car-lib (CarService, CarHvacManager)</p>
-<p>CarHvacApp<br>&emsp;HvacUiService<br>&emsp;&emsp;1. create five windows<br>&emsp;&emsp;2. create HvacPanelController<br>&emsp;&emsp;&emsp;&emsp;1. view initialization and click events…<br>&emsp;&emsp;&emsp;&emsp;2. expand&#x2F;collapse panel<br>&emsp;&emsp;3. bind HvacController<br>&emsp;HvanController (the second service)<br>&emsp;&emsp;dependent on car-lib library to start CarService<br>&emsp;&emsp;&emsp;&emsp;start CarService<br>&emsp;&emsp;&emsp;&emsp;createCar()<br>&emsp;&emsp;&emsp;&emsp;connect()<br>&emsp;&emsp;get CarHvacManager<br>&emsp;&emsp;use CarHvacManager get&#x2F;set hvac properties.<br>&emsp;&emsp;&emsp;&emsp;CarService interact with hal to get&#x2F;set properties</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="Dynamic-Proxy-and-Retrofit"><a href="#Dynamic-Proxy-and-Retrofit" class="headerlink" title="Dynamic Proxy and Retrofit"></a>Dynamic Proxy and Retrofit</h2><p>related resource:<br><a target="_blank" rel="noopener" href="https://liaoxuefeng.com/books/java/reflection/proxy/index.html">https://liaoxuefeng.com/books/java/reflection/proxy/index.html</a></p>
+<p>dynamic proxy is actually the process of creating a proxy class by JVM during runtime</p>
+<p>with the interface as below:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">morning</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JVM generates a proxy class:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloDynamicProxy</span> <span class="keyword">implements</span> <span class="title class_">Hello</span> &#123;</span><br><span class="line">    InvocationHandler handler;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HelloDynamicProxy</span><span class="params">(InvocationHandler handler)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.handler = handler;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">morning</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        handler.invoke(</span><br><span class="line">           <span class="built_in">this</span>,</span><br><span class="line">           Hello.class.getMethod(<span class="string">&quot;morning&quot;</span>, String.class),</span><br><span class="line">           <span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; name &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>as you can see, when you call Proxy.newProxyInstance, it will return the HelloDynamicProxy instance, when we use this proxy instance to call interface method, it will invoke the handler’s invoke method.</p>
+<h2 id="Retrofit-mechanism"><a href="#Retrofit-mechanism" class="headerlink" title="Retrofit mechanism"></a>Retrofit mechanism</h2><p>related resource:<br><a target="_blank" rel="noopener" href="https://proandroiddev.com/retrofit-magic-service-interface-8efd486c8996">https://proandroiddev.com/retrofit-magic-service-interface-8efd486c8996</a></p>
+<p>Retrofit is based on dynamic proxy, user just need to define call service interface.<br>when we call: retrofit.create(..), it will return a proxy instance, just like we say in the above, so when we call retrofit service method, it will routed to InvocationHandler’s invoke method, and then in this method, we will parse the interface method annotations, and make the http call.</p>
+<h3 id="whole-process"><a href="#whole-process" class="headerlink" title="whole process"></a>whole process</h3><p>Validation: Retrofit confirms APIService is valid and annotations are correct.<br>Dynamic Proxy Creation: Retrofit creates a proxy that intercepts method calls.<br>Method Blueprint Creation: The getUser() method is parsed into a ServiceMethod.<br>Runtime Interception: The proxy catches the call and passes it to ServiceMethod.<br>Request Assembly: Query parameters are encoded, headers added.<br>HTTP Execution: The request is executed via OkHttp.<br>Response Conversion: Raw HTTP response is converted to UserResponse using the configured converter.<br>Suspend Resumption: The coroutine is resumed with the result.</p>
 
     </div>
 
@@ -227,14 +236,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/01/17/mobile-challenges/" rel="prev" title="mobile challenges">
-                  <i class="fa fa-angle-left"></i> mobile challenges
+                <a href="/2025/08/13/android-compose/" rel="prev" title="android compose">
+                  <i class="fa fa-angle-left"></i> android compose
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/08/11/carlife/" rel="next" title="carlife">
-                  carlife <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
