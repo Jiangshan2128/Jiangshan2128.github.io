@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,89 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/15/kotin-base-grammer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/15/kotin-base-grammer/" class="post-title-link" itemprop="url">kotin base grammer</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-08-15 17:54:04 / Modified: 21:51:30" itemprop="dateCreated datePublished" datetime="2025-08-15T17:54:04+08:00">2025-08-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="refied-keyword"><a href="#refied-keyword" class="headerlink" title="refied keyword"></a>refied keyword</h2><h3 id="什么是类型擦除"><a href="#什么是类型擦除" class="headerlink" title="什么是类型擦除"></a>什么是类型擦除</h3><p>类型擦除是指在编译时，泛型类型的具体类型信息会被擦除，只保留原始类型。也就是说，在运行时，泛型类型的具体类型参数是不可用的。例如，List<String> 和 List<Int> 在运行时都会被擦除为 List</Int></String></p>
+<h3 id="为什么要类型擦除"><a href="#为什么要类型擦除" class="headerlink" title="为什么要类型擦除"></a>为什么要类型擦除</h3><p>Java 在引入泛型（Java 5）之前，已经存在了大量的非泛型代码。为了确保这些旧代码能够继续运行，Java 需要在不破坏现有代码的基础上引入泛型</p>
+<p>related resource: <a target="_blank" rel="noopener" href="https://article.juejin.cn/post/7474264487513407539">https://article.juejin.cn/post/7474264487513407539</a></p>
+<h3 id="refied"><a href="#refied" class="headerlink" title="refied"></a>refied</h3><p>在 Kotlin 中，reified关键字主要用于在泛型函数中实现类型参数的具体化，使得在函数内部可以直接访问类型参数的具体类型，而不仅仅是作为一个占位符。<br>做到类型擦除后的再生，便于开发者优雅的使用泛型以及获取方法的泛型类型</p>
+<p>related resource: <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2126714">https://cloud.tencent.com/developer/article/2126714</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -184,7 +267,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-08-15 17:03:22 / Modified: 17:50:47" itemprop="dateCreated datePublished" datetime="2025-08-15T17:03:22+08:00">2025-08-15</time>
+      <time title="Created: 2025-08-15 17:03:22 / Modified: 17:52:11" itemprop="dateCreated datePublished" datetime="2025-08-15T17:03:22+08:00">2025-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -954,93 +1037,6 @@
 <p>above android 11, when you start a inter-process server, you need to add <queries> in client menifest file, unless, the bindService function will return false.</queries></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;queries&gt;</span><br><span class="line">    &lt;package android:name=&quot;com.binderpractice.service&quot; /&gt;</span><br><span class="line">    &lt;intent&gt;</span><br><span class="line">        &lt;action android:name=&quot;com.binderpractice.service.MyServiceAction&quot; /&gt;</span><br><span class="line">    &lt;/intent&gt;</span><br><span class="line">&lt;/queries&gt;</span><br></pre></td></tr></table></figure>
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/02/android-thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/01/02/android-thread/" class="post-title-link" itemprop="url">android thread</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2025-01-02 14:31:14" itemprop="dateCreated datePublished" datetime="2025-01-02T14:31:14+08:00">2025-01-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-01-03 16:27:06" itemprop="dateModified" datetime="2025-01-03T16:27:06+08:00">2025-01-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>resources:<br>Understanding Looper, messageQueue, handler: <a target="_blank" rel="noopener" href="https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a">https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a</a></p>
-<p>haandling thread:<br>Handler -&gt; AsyncTask -&gt; RxJava -&gt; Coroutines</p>
-<p>the evolution in F working experience:<br>Retrofic + Rxjava (reactiveX library)-&gt;<br>Retrofit + Livedaata (Android specific related) -&gt;<br>Retrofit + Coroutines (kotlin lib)</p>
 
       
     </div>
