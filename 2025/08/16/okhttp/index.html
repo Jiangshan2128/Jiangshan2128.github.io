@@ -19,26 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"jiangshan2128.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="resources:Understanding Looper, messageQueue, handler: https:&#x2F;&#x2F;janisharali.com&#x2F;blog&#x2F;android-core-looper-handler-and-handlerthread-bd54d69fe91a haandling thread:Handler -&gt; AsyncTask -&gt; RxJava -&amp;g">
+    <meta name="description" content="OKHttpOkHttp intercepterrelated resource: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;368168947 基于责任链经过第一个拦截器，处理Request参数，经过chain.proceed(request)，然后处理第二个拦截器，直至最后一个拦截器，然后最后一个拦截器返回网络数据，再层层往回处理response，最后给到调用端。 添加的拦截器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android thread">
-<meta property="og:url" content="https://jiangshan2128.github.io/2025/01/02/android-thread/index.html">
+<meta property="og:title" content="okhttp">
+<meta property="og:url" content="https://jiangshan2128.github.io/2025/08/16/okhttp/index.html">
 <meta property="og:site_name" content="Working Notes">
-<meta property="og:description" content="resources:Understanding Looper, messageQueue, handler: https:&#x2F;&#x2F;janisharali.com&#x2F;blog&#x2F;android-core-looper-handler-and-handlerthread-bd54d69fe91a haandling thread:Handler -&gt; AsyncTask -&gt; RxJava -&amp;g">
+<meta property="og:description" content="OKHttpOkHttp intercepterrelated resource: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;368168947 基于责任链经过第一个拦截器，处理Request参数，经过chain.proceed(request)，然后处理第二个拦截器，直至最后一个拦截器，然后最后一个拦截器返回网络数据，再层层往回处理response，最后给到调用端。 添加的拦截器">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-01-02T06:31:14.000Z">
-<meta property="article:modified_time" content="2025-01-03T08:27:06.702Z">
+<meta property="article:published_time" content="2025-08-16T01:47:07.000Z">
+<meta property="article:modified_time" content="2025-08-16T01:55:23.462Z">
 <meta property="article:author" content="Jiang Shan">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://jiangshan2128.github.io/2025/01/02/android-thread/">
+<link rel="canonical" href="https://jiangshan2128.github.io/2025/08/16/okhttp/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://jiangshan2128.github.io/2025/01/02/android-thread/","path":"2025/01/02/android-thread/","title":"android thread"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://jiangshan2128.github.io/2025/08/16/okhttp/","path":"2025/08/16/okhttp/","title":"okhttp"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>android thread | Working Notes</title>
+<title>okhttp | Working Notes</title>
   
 
 
@@ -97,7 +97,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -110,6 +110,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OKHttp"><span class="nav-number">1.</span> <span class="nav-text">OKHttp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OkHttp-intercepter"><span class="nav-number">1.1.</span> <span class="nav-text">OkHttp intercepter</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -159,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/02/android-thread/">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/16/okhttp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,12 +173,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="android thread | Working Notes">
+      <meta itemprop="name" content="okhttp | Working Notes">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          android thread
+          okhttp
         </h1>
 
         <div class="post-meta-container">
@@ -187,15 +188,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2025-01-02 14:31:14" itemprop="dateCreated datePublished" datetime="2025-01-02T14:31:14+08:00">2025-01-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-01-03 16:27:06" itemprop="dateModified" datetime="2025-01-03T16:27:06+08:00">2025-01-03</time>
+      <time title="Created: 2025-08-16 09:47:07 / Modified: 09:55:23" itemprop="dateCreated datePublished" datetime="2025-08-16T09:47:07+08:00">2025-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -203,7 +198,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
         </span>
     </span>
 
@@ -216,9 +211,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>resources:<br>Understanding Looper, messageQueue, handler: <a target="_blank" rel="noopener" href="https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a">https://janisharali.com/blog/android-core-looper-handler-and-handlerthread-bd54d69fe91a</a></p>
-<p>haandling thread:<br>Handler -&gt; AsyncTask -&gt; RxJava -&gt; Coroutines</p>
-<p>the evolution in F working experience:<br>Retrofic + Rxjava (reactiveX library)-&gt;<br>Retrofit + Livedaata (Android specific related) -&gt;<br>Retrofit + Coroutines (kotlin lib)</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="OKHttp"><a href="#OKHttp" class="headerlink" title="OKHttp"></a>OKHttp</h2><h3 id="OkHttp-intercepter"><a href="#OkHttp-intercepter" class="headerlink" title="OkHttp intercepter"></a>OkHttp intercepter</h3><p>related resource: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/368168947">https://zhuanlan.zhihu.com/p/368168947</a></p>
+<p>基于责任链<br>经过第一个拦截器，处理Request参数，经过chain.proceed(request)，然后处理第二个拦截器，直至最后一个拦截器，然后最后一个拦截器返回网络数据，再层层往回处理response，最后给到调用端。</p>
+<p>添加的拦截器的顺序很重要，可观察下列拦截器列表的顺序，最后是和服务器通信的拦截器：</p>
+<p>拦截器列表：interceptors	释义<br>client.interceptors	用户自定义的拦截器<br>RetryAndFollowUpInterceptor	重试和重定向拦截器<br>BridgeInterceptor	桥接拦截器<br>CacheInterceptor	缓存拦截器<br>ConnectInterceptor	连接拦截器<br>client.networkInterceptors	当网络请求回来后，用户自定义的拦截器<br>CallServerInterceptor	和服务器通信的拦截器</p>
 
     </div>
 
@@ -232,14 +228,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/12/27/Android-startup/" rel="prev" title="Android_startup">
-                  <i class="fa fa-angle-left"></i> Android_startup
+                <a href="/2025/08/15/kotin-base-grammer/" rel="prev" title="kotin base grammer">
+                  <i class="fa fa-angle-left"></i> kotin base grammer
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/01/03/system-services-aidl-binder/" rel="next" title="system_services_aidl_binder">
-                  system_services_aidl_binder <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

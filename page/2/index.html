@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,124 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/03/system-services-aidl-binder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/03/system-services-aidl-binder/" class="post-title-link" itemprop="url">system_services_aidl_binder</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-01-03 16:28:17" itemprop="dateCreated datePublished" datetime="2025-01-03T16:28:17+08:00">2025-01-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-08 13:04:58" itemprop="dateModified" datetime="2025-01-08T13:04:58+08:00">2025-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Useful resources: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=M6extgmQQNw&t=140s">https://www.youtube.com/watch?v=M6extgmQQNw&amp;t=140s</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p><img src="/../images/system_service_1.jpg" alt="system_server_1"></p>
+<ul>
+<li>almost all system services runs in the System server process.</li>
+<li>every application can have more than one service manager when the client codes call Context.getSystemService() method, the Manager is Per Context not </li>
+<li>per application.</li>
+</ul>
+<p><img src="/../images/system_server_2.jpg" alt="system_server_2"></p>
+<ul>
+<li>all the service managers registered in the SystemServiceRegistry when app launch.</li>
+<li>the service managers are lazy load, will create the service manager instance only when user request the manager.</li>
+</ul>
+<p><img src="/../images/system_server_3.jpg" alt="system_server_3"></p>
+<ul>
+<li>because Application and system server run in different process, if they need to talk, they need to use Binder IPC (inter process communication).</li>
+<li>Binder is a driver, hard&#x2F;complicate to interact with the driver directly.</li>
+<li>so import Aidl interface.</li>
+<li>in this diagram, we could see the arrow flow.</li>
+<li>you can find the service codes you want via finding who implements the Stub, e.g. IAlarmManager.Stub(). here is the actual codes of the service function.</li>
+<li>when you pass an object from application to service, dont pass large object reference (Activity), because the object in service is collected by garbage collector which is not collect that often, then leed to memory leak. (the Activity object will not destroyed until the garbage collector take action.)</li>
+</ul>
+<p><img src="/../images/system_server_4.jpg" alt="system_server_4"></p>
+<ul>
+<li>the system server process get created when boot. the Stub is created.</li>
+<li>all the services will registered into ‘Service Manager’, and using magic to convert to IBinder stored in Service Manager.</li>
+<li>when application ask for one service -&gt; hey service manager, I want to ask for the service manager named XXX -&gt; service manager: ok I will find it, and convert the corresponding IBinder into aidl proxy.</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public AlarmManager createService(ContextImpl ctx) throws ServiceNotFoundException &#123;</span><br><span class="line">    IBinder b = ServiceManager.getServiceOrThrow(Context.ALARM_SERVICE);</span><br><span class="line">    IAlarmManager service = IAlarmManager.Stub.asInterface(b);</span><br><span class="line">    return new AlarmManager(service, ctx);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><p>aidl file should be under aidl directory<br><img src="/../images/aidl.jpg" alt="aidld"></p>
+<p>need to add buildFeatures.aidl &#x3D; true in build.gradle</p>
+<p>above android 11, when you start a inter-process server, you need to add <queries> in client menifest file, unless, the bindService function will return false.</queries></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;queries&gt;</span><br><span class="line">    &lt;package android:name=&quot;com.binderpractice.service&quot; /&gt;</span><br><span class="line">    &lt;intent&gt;</span><br><span class="line">        &lt;action android:name=&quot;com.binderpractice.service.MyServiceAction&quot; /&gt;</span><br><span class="line">    &lt;/intent&gt;</span><br><span class="line">&lt;/queries&gt;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
