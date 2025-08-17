@@ -264,9 +264,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-08-15 17:54:04 / Modified: 21:51:30" itemprop="dateCreated datePublished" datetime="2025-08-15T17:54:04+08:00">2025-08-15</time>
+      <time title="Created: 2025-08-15 17:54:04" itemprop="dateCreated datePublished" datetime="2025-08-15T17:54:04+08:00">2025-08-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-08-17 09:51:33" itemprop="dateModified" datetime="2025-08-17T09:51:33+08:00">2025-08-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -293,7 +299,9 @@
 <p>related resource: <a target="_blank" rel="noopener" href="https://article.juejin.cn/post/7474264487513407539">https://article.juejin.cn/post/7474264487513407539</a></p>
 <h3 id="refied"><a href="#refied" class="headerlink" title="refied"></a>refied</h3><p>在 Kotlin 中，reified关键字主要用于在泛型函数中实现类型参数的具体化，使得在函数内部可以直接访问类型参数的具体类型，而不仅仅是作为一个占位符。<br>做到类型擦除后的再生，便于开发者优雅的使用泛型以及获取方法的泛型类型</p>
 <p>related resource: <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2126714">https://cloud.tencent.com/developer/article/2126714</a></p>
-
+<h2 id="StateFlow和SharedFlow的区别"><a href="#StateFlow和SharedFlow的区别" class="headerlink" title="StateFlow和SharedFlow的区别"></a>StateFlow和SharedFlow的区别</h2><p>StateFlow is a special SharedFlow. with only last one observed when client subcribe on it.<br>StateFlow holds an value inside (has a <code>value</code> property inside), if you want to update and observe state, you need to use StateFlow.<br>if you just want to observe event instead of state change, you can use SharedFlow.</p>
+<h2 id="Coroutine-channel"><a href="#Coroutine-channel" class="headerlink" title="Coroutine channel"></a>Coroutine channel</h2><p>related resources: <a target="_blank" rel="noopener" href="https://proandroiddev.com/mastering-kotlin-coroutine-channels-in-android-from-basics-to-advanced-patterns-b6fdd7754cca">https://proandroiddev.com/mastering-kotlin-coroutine-channels-in-android-from-basics-to-advanced-patterns-b6fdd7754cca</a><br>channel is used for sending one message from one coroutine to another, not observable mode, you need to receive it mannually, if two coroutines want to receive the message, then follow first receive first get, the another one will get nothing.</p>
+<h2 id="flow-stateIn-and-flow-sharedIn"><a href="#flow-stateIn-and-flow-sharedIn" class="headerlink" title="flow stateIn and flow sharedIn"></a>flow stateIn and flow sharedIn</h2>
       
     </div>
 
