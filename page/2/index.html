@@ -118,7 +118,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -145,6 +145,546 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/11/carlife/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/11/carlife/" class="post-title-link" itemprop="url">carlife</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-08-11 18:00:17" itemprop="dateCreated datePublished" datetime="2025-08-11T18:00:17+08:00">2025-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-08-12 16:00:17" itemprop="dateModified" datetime="2025-08-12T16:00:17+08:00">2025-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>instead of using json&#x2F;xml, carlife use protocol buffer(protobuf) format to exchange data.<br>related resource: <a target="_blank" rel="noopener" href="https://medium.com/nerd-for-tech/protobuf-what-why-fcb324a64564">https://medium.com/nerd-for-tech/protobuf-what-why-fcb324a64564</a></p>
+<h2 id="CarLife-Channels"><a href="#CarLife-Channels" class="headerlink" title="CarLife Channels"></a>CarLife Channels</h2><p>carlife data streams:<br>command channel(控制流)<br>video channel<br>audio channel<br>&emsp;1. media<br>&emsp;2. navigation TTS(Text to Sound)<br>touch channel(反控流)：传输车机触摸事件或者按键事件到手机端<br>VR channel(语音流)：automotive -&gt; mobile</p>
+<h2 id="AOA连接（Android手机）"><a href="#AOA连接（Android手机）" class="headerlink" title="AOA连接（Android手机）"></a>AOA连接（Android手机）</h2><p><img src="/../images/carlife_aoa_process.JPG" alt="AOSP_CARLIFE_AOA"></p>
+<p>HU(Head Unit): 车载娱乐系统<br>MD(Mobile Device): 手机</p>
+<ol>
+<li>配件（车机）枚举连接过来的设备，判断Android设备（手机）是否处于Accessory Mode，如果不是，车机向手机发出切换到AOA模式的请求。</li>
+<li>车机向手机发送51号指令，查看手机是否支持AOA协议</li>
+<li>发送52号指令，附带信息：(Manufacturer: Baidu, Model	Name	<br>: CarLife, Version: 1.0.0)</li>
+<li>发送53号指令，请求手机切换至AOA模式，手机根据上述三个参数，确定绑定到该车机的app</li>
+<li>连接成功</li>
+</ol>
+<h2 id="AOA消息结构"><a href="#AOA消息结构" class="headerlink" title="AOA消息结构"></a>AOA消息结构</h2><p><img src="/../images/carlife_aoa_message.JPG" alt="AOSP_CARLIFE_AOA_MESSAGE"><br>消息中Chennel ID标明这个消息来自于哪个数据通道，AOA Head共8个字节</p>
+<h2 id="音频焦点类型"><a href="#音频焦点类型" class="headerlink" title="音频焦点类型"></a>音频焦点类型</h2><p>长期独占型：Media，音频焦点在申请过后，不会主动释放，只有被其他音频应用抢占时，才会失去自身的音频焦点。<br>短期独占型：VR，在较短时间内占用音频播放设备，使用完之后马上释放播放设备。<br>可混音型：导航TTS，短期占用音频设备，但是期间其他音频应用可以同时使用该音频播放设备，降低音量</p>
+<p>above android 12, system will handle audio focus change, you dont need to abandon audio focus mannually, make sure the sudio attributes set correctly.</p>
+<p>key components:<br>AudioManager<br>AudioFocusRequest: audio focus parameters<br>OnAudioFocusChangeListener</p>
+<h3 id="音频模块优先级"><a href="#音频模块优先级" class="headerlink" title="音频模块优先级"></a>音频模块优先级</h3><p>电话 &gt; VR &gt; Media&#x2F;导航</p>
+<h2 id="各种通道数据传输"><a href="#各种通道数据传输" class="headerlink" title="各种通道数据传输"></a>各种通道数据传输</h2><p>基本为先通过命令通道发送命令协商前期参数及准备，然后通过视频&#x2F;音频通道发送真实数据。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/08/11/hvac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/08/11/hvac/" class="post-title-link" itemprop="url">hvac</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-08-11 16:15:16 / Modified: 17:54:16" itemprop="dateCreated datePublished" datetime="2025-08-11T16:15:16+08:00">2025-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="HVAC-（Heating-Ventilation-and-Air-Conditioning）"><a href="#HVAC-（Heating-Ventilation-and-Air-Conditioning）" class="headerlink" title="HVAC （Heating, Ventilation and Air Conditioning）"></a>HVAC （Heating, Ventilation and Air Conditioning）</h2><p>article link: <a target="_blank" rel="noopener" href="https://juejin.cn/post/6997290650794197022">https://juejin.cn/post/6997290650794197022</a></p>
+<p>main charactors:<br>SystemUI, CarHvacApp, car-lib (CarService, CarHvacManager)</p>
+<p>CarHvacApp<br>&emsp;HvacUiService<br>&emsp;&emsp;1. create five windows<br>&emsp;&emsp;2. create HvacPanelController<br>&emsp;&emsp;&emsp;&emsp;1. view initialization and click events…<br>&emsp;&emsp;&emsp;&emsp;2. expand&#x2F;collapse panel<br>&emsp;&emsp;3. bind HvacController<br>&emsp;HvanController (the second service)<br>&emsp;&emsp;dependent on car-lib library to start CarService<br>&emsp;&emsp;&emsp;&emsp;start CarService<br>&emsp;&emsp;&emsp;&emsp;createCar()<br>&emsp;&emsp;&emsp;&emsp;connect()<br>&emsp;&emsp;get CarHvacManager<br>&emsp;&emsp;use CarHvacManager get&#x2F;set hvac properties.<br>&emsp;&emsp;&emsp;&emsp;CarService interact with hal to get&#x2F;set properties</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/17/mobile-challenges/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/17/mobile-challenges/" class="post-title-link" itemprop="url">mobile challenges</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 16:14:29 / Modified: 16:22:26" itemprop="dateCreated datePublished" datetime="2025-01-17T16:14:29+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Cannot-find-Object-XXX"><a href="#Cannot-find-Object-XXX" class="headerlink" title="Cannot find Object XXX"></a>Cannot find Object XXX</h2><h3 id="problem"><a href="#problem" class="headerlink" title="problem"></a>problem</h3><p>for the codes below:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">object ServiceCreator &#123;</span><br><span class="line">    private val retrofit: Retrofit =</span><br><span class="line">        Retrofit.Builder()</span><br><span class="line">            .baseUrl(&quot;https://api.example.com/v1/&quot;)</span><br><span class="line">            .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">            .build()</span><br><span class="line"></span><br><span class="line">    fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)</span><br><span class="line"></span><br><span class="line">    inline fun &lt;reified T&gt; create(): T = create(T::class.java)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>when I run the app, the app  crashed, when I look into the logs, it said, cannot find the ServiceCreator object……..</p>
+<h3 id="root-cause"><a href="#root-cause" class="headerlink" title="root cause"></a>root cause</h3><p>when the ServiceCreator get inited, the retrofic instance get created, here is the problem, when we create the retrofic instance, some reason, it throws exception, so it leads to the retrofic instance is not got created successfully.</p>
+<h3 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">object ServiceCreator &#123;</span><br><span class="line">    private val retrofit: Retrofit by lazy &#123;</span><br><span class="line">            Retrofit.Builder()</span><br><span class="line">                .baseUrl(&quot;https://api.example.com/v1/&quot;)</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fun &lt;T&gt; create(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)</span><br><span class="line"></span><br><span class="line">    inline fun &lt;reified T&gt; create(): T = create(T::class.java)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/17/create-custom-system-app-in-aosp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/17/create-custom-system-app-in-aosp/" class="post-title-link" itemprop="url">create custom system app in aosp</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 13:22:21 / Modified: 14:33:10" itemprop="dateCreated datePublished" datetime="2025-01-17T13:22:21+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>some blockers when I created a custom app in aosp for automotive.</p>
+<h2 id="how-to-create-a-new-module-under-AOSP"><a href="#how-to-create-a-new-module-under-AOSP" class="headerlink" title="how to create a new module under AOSP"></a>how to create a new module under AOSP</h2><p>at first, I want to edit the new project in aosp project folder, but it is so hard to manage the deoendencies without build.gradle.</p>
+<p>so, I know that the right way is to create this app in Android Sudio with gradle, an when we tested ready, then copy the source folders under packages&#x2F;apps&#x2F;, and write a Android.bp file seperately.</p>
+<h2 id="how-to-find-the-depdencies-name-in-aosp"><a href="#how-to-find-the-depdencies-name-in-aosp" class="headerlink" title="how to find the depdencies name in aosp"></a>how to find the depdencies name in aosp</h2><p>most of the unrecognized dependencies are prebuilt sdks, like the androidx libraries, if you want to find the library’s name in AOSP:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">androidx-constraintlayout = &#123; group = &quot;androidx.constraintlayout&quot;, name = &quot;constraintlayout&quot;, version.ref = &quot;constraintlayout&quot; &#125;</span><br></pre></td></tr></table></figure>
+<p>then I need to go to &#x2F;prebuilt&#x2F; library to search the name using</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ada@Win10AFZVA:~/Aosp/prebuilts/sdk$ find . -type f -exec grep -H &#x27;name:.*fragment&#x27; &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<p>this command will listed the following:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-ktx-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-ktx&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.fragment_fragment&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-ktx-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-ktx&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment-nodeps&quot;,</span><br><span class="line">./current/androidx/Android.bp:    name: &quot;androidx.navigation_navigation-fragment&quot;,</span><br><span class="line">./current/support/Android.bp:    name: &quot;android-support-fragment-nodeps&quot;,</span><br><span class="line">./current/support/Android.bp:    name: &quot;android-support-fragment&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>also, we can just use the grep command:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ada@Win10AFZVA:~/Aosp/prebuilts/sdk/current/androidx$ grep &#x27;name:.*fragment&#x27; Android.bp</span><br></pre></td></tr></table></figure>
+
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><p>seems like when we using Android.bp, it doesnot support the high level things like view binding. you can just using gradle to generate these files and then link to the aosp project.</p>
+<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p>in app’s Android.bp, where we define the dependecies using static_libs, it is weird that some libraries even we dont list here, we can stil pass the compile, seems like they are imported somewhere else, e.g. androidx.fragmetn.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/08/my-mobile-app/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/08/my-mobile-app/" class="post-title-link" itemprop="url">my mobile app</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-01-08 13:15:37" itemprop="dateCreated datePublished" datetime="2025-01-08T13:15:37+08:00">2025-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-17 16:14:05" itemprop="dateModified" datetime="2025-01-17T16:14:05+08:00">2025-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Mobile/" itemprop="url" rel="index"><span itemprop="name">Mobile</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>here I want to take time to build a mobile app just like Fidelity to review the things I learned these years.</p>
+<ul>
+<li><p>introduce bom strategy to import compose dependency, so that we dont need to define each compose libraries’ version, it is all updated by bom.</p>
+</li>
+<li><p>use version catalog to manage versions.</p>
+</li>
+<li><p>use compose to develop ui part</p>
+</li>
+<li><p>use mvvm structure. and coroutines</p>
+</li>
+<li><p>use retrofit to fetch service.</p>
+</li>
+<li><p>use ksp to decouple modules.</p>
+</li>
+</ul>
+<p>project link: <a target="_blank" rel="noopener" href="https://github.com/Jiangshan2128/DemoApp/tree/master">https://github.com/Jiangshan2128/DemoApp/tree/master</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2025/01/06/aosp-tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jiang Shan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Working Notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/01/06/aosp-tools/" class="post-title-link" itemprop="url">aosp-tools</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-06 14:20:27 / Modified: 14:23:26" itemprop="dateCreated datePublished" datetime="2025-01-06T14:20:27+08:00">2025-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>AOSP codes search:<br><a target="_blank" rel="noopener" href="https://cs.android.com/android/platform/superproject/+/android-11.0.0_r3">https://cs.android.com/android/platform/superproject/+/android-11.0.0_r3</a>:</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -458,92 +998,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/27/tech-diary-2024-12-27/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/27/tech-diary-2024-12-27/" class="post-title-link" itemprop="url">tech_diary_2024_12_27</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-27 11:43:45 / Modified: 11:50:18" itemprop="dateCreated datePublished" datetime="2024-12-27T11:43:45+08:00">2024-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Yesterday, after the flue is getting better, I can have my brain back to learn something interesting, so I tried Copilot and Gemini for free version</p>
-<ul>
-<li><p>For the Gemini, I installed it in Android Studio, seems like it needs the whole project to loaded, and then it can recognize the files in it.</p>
-</li>
-<li><p>For Copilot, I installed it in VS Code, when I drag one individual file into VS Code, it can recognize it, for this perspective, I think it is more easy to use.</p>
-</li>
-</ul>
-<p>I think by using the AI tool on development, it is good to use them analyze codes and generate unit testing codes, for wring, it is hard to know the business logics, so, it is still cool for me.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/09/aosp-basics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -636,468 +1090,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/09/aosp-car-systemui/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/09/aosp-car-systemui/" class="post-title-link" itemprop="url">aosp_car_systemui</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-09 10:12:35 / Modified: 11:36:03" itemprop="dateCreated datePublished" datetime="2024-12-09T10:12:35+08:00">2024-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="System-UI-source-code"><a href="#System-UI-source-code" class="headerlink" title="System UI source code"></a>System UI source code</h2><p>&#x2F;packages&#x2F;apps&#x2F;Car&#x2F;SystemUI, in the packages directory, it contains the components run in other devices.</p>
-<p>in \wsl.localhost\Ubuntu\home\ada\Aosp\packages\apps\Car\SystemUI\res\values\config.xml, you can see the entry point like config_statusBarComponent</p>
-<h2 id="Overlay"><a href="#Overlay" class="headerlink" title="Overlay"></a>Overlay</h2><ul>
-<li><p>Use overlay to change the systemui, it is not recommanded to change the source code, becuase someday you may upgrade the code will cause merge conflict…So, official document recommands to use overlay instead.</p>
-</li>
-<li><p>overlay can only replace resources</p>
-</li>
-</ul>
-<h2 id="Source-code-change"><a href="#Source-code-change" class="headerlink" title="Source code change"></a>Source code change</h2><p>if overlay cannot satisfy your requirement, you better to extend the code instead of changing the source code.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/08/tech-diary/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/08/tech-diary/" class="post-title-link" itemprop="url">tech_diary</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-12-08 18:00:42" itemprop="dateCreated datePublished" datetime="2024-12-08T18:00:42+08:00">2024-12-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-11 15:47:01" itemprop="dateModified" datetime="2025-02-11T15:47:01+08:00">2025-02-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Today is sunday, because I cannot go outside, now I have an interesting of watching some new tech posts and live broadcasts, it is weird that in the past, I dont want to use my personal time to watch such kind of things totally, but right now, maybe because I cannot go outside play or I miss the company, I think watch that live broadcast is very interesting.</p>
-<p>So, I watched one Google devfest live broadcast<br>and it mentions the Gemini, I still remember that access of <strong>Gemini</strong> – I stil didnot get it in my company, but I know it is very interesting, I should try it.<br>it also mentions <strong>Mobile-Agent</strong>, sounds like it is something like Siri, it can be an assistant in our mobile to do some operations on behalf of ourselves, it will be the trend, but still have some challenges to fix – delay or something, The <strong>Agent</strong> is called 智能体 in Chinese, it try to copy the way of people thinking or making decisions.</p>
-<p>also I watched a ‘how AI will change the ways of coding’<br><strong>AI assistent</strong> - developed by jetbrains, they said they have all the abilities in GPT, for the abilities GPT dont have? – they are working on it.<br><strong>Github</strong> -&gt; GitLab, people prefer to use gitLab instead of github, because of the gitlab is much more private, I dont know this before, I should check it. </p>
-<p>To sum up, AI is definitely the trend, no matter GPT (OpenAI) &#x2F; Gemini (Google) &#x2F; Ai Assistant (jetbrains), they will change our life.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/04/aosp-env-setup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/04/aosp-env-setup/" class="post-title-link" itemprop="url">aosp_env_setup</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-12-04 20:20:41" itemprop="dateCreated datePublished" datetime="2024-12-04T20:20:41+08:00">2024-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-05 11:39:55" itemprop="dateModified" datetime="2024-12-05T11:39:55+08:00">2024-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AOSP/" itemprop="url" rel="index"><span itemprop="name">AOSP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Useful-Resource"><a href="#Useful-Resource" class="headerlink" title="Useful Resource"></a>Useful Resource</h2><ol>
-<li>I setup the env follow this blog: <a target="_blank" rel="noopener" href="https://blog.csdn.net/devnn/article/details/131868022">https://blog.csdn.net/devnn/article/details/131868022</a></li>
-</ol>
-<h2 id="Some-challenges"><a href="#Some-challenges" class="headerlink" title="Some challenges"></a>Some challenges</h2><h3 id="AOSP-Cygwin-virtual-box-wsl"><a href="#AOSP-Cygwin-virtual-box-wsl" class="headerlink" title="AOSP - Cygwin &#x2F; virtual box &#x2F; wsl"></a>AOSP - Cygwin &#x2F; virtual box &#x2F; wsl</h3><ul>
-<li><p>bacause my computer system is Windows, so at first, I dont want to install VMWare or somthing which is really complex, so I tried to use cygwin to run linux commands, but finally, it turns out that the Cygwin is not enough, it lacks some tools that AOSP build needs. </p>
-</li>
-<li><p>so, the second try, I want to use the virtual box to lunch the linux system (Ubuntu), it should work, but it need to confg many things, and you need to download virtual box, I did not end up with this method, but it should work, I want to have a simpler way, better to just have a command line.</p>
-</li>
-<li><p>the final solution: I use WSL, because my computer is Win10, so it born with the WSL tool, so I setup the unbuntu with wsl reference to the resource 1, finally did it. it just have a Ubuntu command line, dont have the user interface, it is much more lighter.</p>
-</li>
-</ul>
-<h3 id="Challenges-Env-setup"><a href="#Challenges-Env-setup" class="headerlink" title="Challenges Env setup"></a>Challenges Env setup</h3><ul>
-<li>For downloading the AOSP, at first, I downloaded the latest version, but, you know what?….I finally found that AS dont have a emulator can run Android 16, so I need to re-download the AOSP with Android 13.</li>
-</ul>
-<h3 id="Challenges-building-AOSP"><a href="#Challenges-building-AOSP" class="headerlink" title="Challenges building AOSP"></a>Challenges building AOSP</h3><ul>
-<li><p>When I use the ‘m’ command to start the build, it ends up with not enough memory error(error code 137), but I checked with the memory, it seems enough, finally it turns out that I need to use ‘m -j8’ to identify the threads, otherwies, it may use all the threads, then the memory will not enough.</p>
-</li>
-<li><p>For choosing the lunch target, we can find related targets in \Aosp\device\generic\car\AndroidProducts.mk, I thought need to use the target - aosp_car_x86_64, but when it build finished, I need to pack a zip file to windows, I found the pack zip file command not work, it turns out we need to use the target with sdk prefix, so we can have the zip file, and lunch the image in windows emulator.</p>
-</li>
-</ul>
-<h3 id="Final-Result"><a href="#Final-Result" class="headerlink" title="Final Result"></a>Final Result</h3><p><img src="/../images/AOSP_Env_Setup.jpg" alt="image"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/04/My-first-try/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/04/My-first-try/" class="post-title-link" itemprop="url">My first try</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2024-12-04 13:46:22 / Modified: 15:51:35" itemprop="dateCreated datePublished" datetime="2024-12-04T13:46:22+08:00">2024-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Personal/" itemprop="url" rel="index"><span itemprop="name">Personal</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Brand-New-Start"><a href="#Brand-New-Start" class="headerlink" title="Brand New Start!"></a>Brand New Start!</h2><p>It is so good to know this way of wrting tech blogs, this is absolutely the brand new start, so interesting, thanks Jack!</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://jiangshan2128.github.io/2024/12/03/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jiang Shan">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Working Notes">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/12/03/hello-world/" class="post-title-link" itemprop="url">Hexo</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-12-03 20:16:21" itemprop="dateCreated datePublished" datetime="2024-12-03T20:16:21+08:00">2024-12-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-09 15:58:26" itemprop="dateModified" datetime="2024-12-09T15:58:26+08:00">2024-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-<p>if we want to create a new category, just run ‘hexo new page pagename’, and when you create a new post, remember to set the corresponding category on top of that post script.</p>
-<ul>
-<li>have problems loading png file. so, use jpg</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1108,7 +1102,7 @@
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2025</span>
+    <span itemprop="copyrightYear">2026</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
